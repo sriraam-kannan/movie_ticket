@@ -1,27 +1,25 @@
 {
+  "name": "movie_ticket_backend",
+  "version": "1.0.0",
+  "description": "backend node app for movie_ticket",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "knex": "^3.1.0",
     "pg": "^8.13.0"
   },
-  "bundleDependencies": [
-    "express"
-  ],
-  "name": "movie_ticket_backend",
-  "version": "1.0.0",
-  "description": "backend node app for movie_ticket",
-  "main": "index.js",
-  "scripts": {
-    "dev": "node --watch index.ts",
-    "start": "node index.ts"
-  },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.7.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "ts-node-dev": "^2.0.0"
   }
 }

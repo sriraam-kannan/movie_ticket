@@ -1,28 +1,23 @@
-// index.ts
 import express from "express";
 import knex from "knex";
 import dbConfig from "./database/knexfile";
-import appRoutes from "./appModules/appRoutes";
-import { config } from "dotenv";
+import appRoutes from "./appRoutes";
+import dotenv from "dotenv";
 
-// Load environment variables
-config();
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Knex
 const db = knex(dbConfig);
 
-// Middleware
 app.use(express.json());
 
-// Use app routes
-app.use("/api", appRoutes(db));
+app.use("/api", appRoutes);
 
 app.get("/healthCheck", async (req, res) => {
-  res.status(500).send({
-    message: "Error retrieving data!",
+  res.status(200).send({
+    message: "Service is up and running!!",
   });
 });
 

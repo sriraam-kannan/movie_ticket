@@ -1,11 +1,10 @@
-// database/knexfile.ts
 import { config } from "dotenv";
 
-config(); // Load environment variables
+config();
 
 const dbConfig = {
   client: "pg",
   connection: process.env.DB_URL,
 };
-
+console.log("dbConfig", dbConfig);
 export default dbConfig;

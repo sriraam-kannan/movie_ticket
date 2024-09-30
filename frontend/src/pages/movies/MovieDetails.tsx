@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   CalendarDays,
   Clock,
@@ -24,11 +24,12 @@ interface MovieDetailProps {
   runtime: string;
   rating: number;
   year: number;
+  imdbID: string;
 }
 
 const OMDB_API_KEY = "7055a610";
 
-const MovieDetails: React.FC = () => {
+const MovieDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<MovieDetailProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -54,7 +55,8 @@ const MovieDetails: React.FC = () => {
             releaseDate: data.Released,
             runtime: data.Runtime,
             rating: parseFloat(data.imdbRating),
-            year: parseInt(data.Year, 10), // Ensure year is a number
+            year: parseInt(data.Year, 10),
+            imdbID: data.imdbID,
           });
         } else {
           setError(data.Error);
@@ -139,12 +141,13 @@ const MovieDetails: React.FC = () => {
             </ul>
           </div>
 
-          {/* Conditionally show the "Book Ticket" button */}
           {movie.year === currentYear && (
-            <Button className="w-full md:w-auto" size="lg">
-              <Ticket className="w-5 h-5 mr-2" />
-              Book Ticket
-            </Button>
+            <Link to={`book-ticket`}>
+              <Button className="w-full md:w-auto" size="lg">
+                <Ticket className="w-5 h-5 mr-2" />
+                Book Ticket
+              </Button>
+            </Link>
           )}
         </div>
       </div>

@@ -9,7 +9,7 @@ interface MovieCardProps {
     Year: string;
     Poster: string;
     Rating: number;
-    Certification: string;     
+    Certification: string;
     Language: string;
     imdbRating: string;
   };

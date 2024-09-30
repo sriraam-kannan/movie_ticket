@@ -18,6 +18,8 @@ interface Movie {
   Year: string;
   Language: string;
   imdbRating: string;
+  Rating?: number;
+  Certification?: string;
 }
 
 interface OMDBApiResponse {

@@ -1,14 +1,14 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 /** Layouts */
 import UnAuthorizedLayout from "./layouts/UnAuthorizedLayout";
 import AuthorizedLayout from "./layouts/AuthorizedLayout";
 
 // /** UnAuthorized Pages */
-import Login from "./pages/login";
+import Login from "./pages/Login";
 
-// /** Authorized Pages */
-import Dashboard from "./pages/Dashboard";
+// /** MoviesRouter */
+import MoviesRouter from "../src/pages/movies/MoviesRouter";
 
 export const appRouter = createBrowserRouter([
   {
@@ -17,7 +17,11 @@ export const appRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Dashboard />,
+        element: <Navigate to="/movies" replace />,
+      },
+      {
+        path: "movies/*",
+        element: <MoviesRouter />,
       },
     ],
   },

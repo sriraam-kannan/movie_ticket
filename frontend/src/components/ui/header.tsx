@@ -28,10 +28,10 @@ export default function Header() {
           Home
         </Link>
         <Link
-          to="/movies"
+          to="/movies/search"
           className="text-lg font-medium hover:underline hover:text-blue-600"
         >
-          Movies
+          Search Movies
         </Link>
         <Link
           to="/theatres"

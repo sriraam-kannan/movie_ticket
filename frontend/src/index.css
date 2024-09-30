@@ -29,9 +29,13 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
   min-width: 320px;
   min-height: 100vh;
+  padding: 0 20px; /* Add padding to the left and right */
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 
 h1 {

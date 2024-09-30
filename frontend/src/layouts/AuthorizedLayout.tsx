@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import Header from "@/components/ui/Header";
+import Header from "@/components/ui/header";
 
 export default function AuthorizedLayout() {
   const isLoggedIn = localStorage.getItem("login") === "true";
@@ -11,9 +11,11 @@ export default function AuthorizedLayout() {
 
   return (
     <>
-      <Header />
-      <div className="grid h-screen w-full">
-        <Outlet />
+      <div className="flex flex-row space-y-12">
+        <Header />
+        <div className="grid h-screen w-full">
+          <Outlet />
+        </div>
       </div>
     </>
   );

@@ -41,6 +41,8 @@ CREATE TABLE booked_tickets (
     show_time TIMESTAMP NOT NULL,
     amount_paid DECIMAL(10, 2) NOT NULL CHECK (amount_paid >= 0), 
     theatre_name VARCHAR(255) NOT NULL,            
+    imdb_id VARCHAR(20) NOT NULL,       
+    movie_name VARCHAR(255) NOT NULL,     
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -16,9 +10,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import TicketSummaryPopup from "./TicketSummary";
 
-// Seat component to render individual seats
+import TicketSummaryPopup from "./TicketSummary";
+import neoAxios from "@/lib/neoAxios";
+
 interface SeatProps {
   id: string;
   isSelected: boolean;
@@ -54,12 +49,32 @@ const TheaterBookingPage = () => {
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const ticketPrice = 120;
 
-  // Simulate fetching booked seats from the API based on criteria
+  const generateDates = () => {
+    const dates = [];
+    const today = new Date();
+    for (let i = 0; i < 5; i++) {
+      const nextDate = new Date(today);
+      nextDate.setDate(today.getDate() + i);
+      dates.push(nextDate);
+    }
+    return dates;
+  };
+
+  const availableDates = generateDates();
+
   useEffect(() => {
     if (selectedTheater && selectedShowTime && selectedDate) {
       const fetchBookedSeats = async () => {
-        const response = await Promise.resolve(["A-1", "B-3", "F-9"]);
-        setBookedSeats(response);
+        try {
+          const response = await neoAxios.post("/api/movies/bookedTickets", {
+            theatreName: selectedTheater,
+            showTime: selectedShowTime,
+            date: format(selectedDate, "yyyy-MM-dd"),
+          });
+          setBookedSeats(response.data);
+        } catch (error) {
+          console.error("Error fetching booked seats:", error);
+        }
       };
       fetchBookedSeats();
     }
@@ -78,9 +93,9 @@ const TheaterBookingPage = () => {
       selectedShowTime &&
       selectedDate
     ) {
-      setIsSummaryOpen(true); // Open summary modal
+      setIsSummaryOpen(true);
     } else {
-      window.alert("Please select seats, theater, date, and show time.");
+      window.alert("Please select seats.");
     }
   };
 
@@ -193,32 +208,24 @@ const TheaterBookingPage = () => {
               </SelectContent>
             </Select>
 
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !selectedDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {selectedDate ? (
-                    format(selectedDate, "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                  initialFocus
+            <Select
+              onValueChange={(value) => setSelectedDate(new Date(value))}
+              value={selectedDate ? selectedDate.toString() : ""}
+            >
+              <SelectTrigger>
+                <SelectValue
+                  placeholder="Select Date"
+                  value={selectedDate ? format(selectedDate, "PPP") : ""}
                 />
-              </PopoverContent>
-            </Popover>
+              </SelectTrigger>
+              <SelectContent>
+                {availableDates.map((date) => (
+                  <SelectItem key={date.toString()} value={date.toString()}>
+                    {format(date, "PPP")}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

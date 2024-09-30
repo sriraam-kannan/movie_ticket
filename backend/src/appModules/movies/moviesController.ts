@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import db from "../../database/db";
 
-// Book ticket
 export async function bookTicket(
   req: Request,
   res: Response
@@ -25,7 +24,6 @@ export async function bookTicket(
   }
 }
 
-// Fetch ticket
 export async function fetchTicket(
   req: Request,
   res: Response
@@ -42,5 +40,21 @@ export async function fetchTicket(
   } catch (error) {
     console.error("Error fetching ticket:", error);
     return res.status(500).json({ error: "Error fetching ticket" });
+  }
+}
+
+export async function getBookedTickets(req: Request, res: Response) {
+  console.log("getBookedTickets API Hit successful!!");
+  const { theatreName, showTime, date } = req.query;
+
+  try {
+    const tickets = await db("booked_tickets")
+      .select("*")
+      .where({ theatreName: theatreName, showTime: showTime, date: date });
+
+    return res.status(200).json(tickets);
+  } catch (error) {
+    console.error("Error fetching booked tickets:", error);
+    return res.status(500).json({ error: "Error fetching booked tickets" });
   }
 }

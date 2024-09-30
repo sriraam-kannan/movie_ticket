@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { CircleUser } from "lucide-react";
+
+import { CircleUserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -33,14 +34,9 @@ export default function Header() {
         >
           Search Movies
         </Link>
+
         <Link
-          to="/theatres"
-          className="text-lg font-medium hover:underline hover:text-blue-600"
-        >
-          Theatres
-        </Link>
-        <Link
-          to="/mytickets"
+          to="/movies/mytickets"
           className="text-lg font-medium hover:underline hover:text-blue-600"
         >
           My Tickets
@@ -53,7 +49,7 @@ export default function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
-              <CircleUser className="h-5 w-5" />
+              <CircleUserRound className="h-8 w-8 text-blue-600" />
               <span className="sr-only">Toggle user menu</span>
             </Button>
           </DropdownMenuTrigger>

@@ -21,3 +21,4 @@ To be improved:
 1. styling of pages for making the app elegant
 2. Login and sign-up for better login experience
 3. Improvements in respect to the deployments
+4. Admin panel to manage list of theatres, show times and user logins

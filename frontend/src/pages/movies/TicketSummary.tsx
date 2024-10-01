@@ -1,68 +1,96 @@
 import React from "react";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
+import neoAxios from "@/lib/neoAxios";
+import { useNavigate } from "react-router-dom";
 
 interface TicketSummaryPopupProps {
   selectedSeats: string[];
-  theaterName: string;
-  showTime: string;
-  showDate: Date | null;
+  selectedTheater: string;
+  selectedShowTime: string;
+  selectedDate: Date | null;
   ticketPrice: number;
-  closeSummary: () => void;
+  username: string;
+  email: string;
+  movie: {
+    imdbId: string;
+    name: string;
+  };
+  onClose: () => void;
 }
 
 const TicketSummaryPopup: React.FC<TicketSummaryPopupProps> = ({
   selectedSeats,
-  theaterName,
-  showTime,
-  showDate,
+  selectedTheater,
+  selectedShowTime,
+  selectedDate,
   ticketPrice,
-  closeSummary,
+  username,
+  email,
+  movie,
+  onClose,
 }) => {
+  const navigate = useNavigate();
   const totalPrice = selectedSeats.length * ticketPrice;
 
-  const handleConfirm = () => {
-    const bookingDetails = {
-      theater: theaterName,
-      seats: selectedSeats,
-      showTime,
-      showDate: showDate ? format(showDate, "PPP") : null,
-      pricePerSeat: ticketPrice,
-      totalPrice,
-    };
+  const handleConfirm = async () => {
+    const userDetails = JSON.parse(localStorage.getItem("login") || "{}");
+    try {
+      console.log("movie in try block", movie);
 
-    // This is where you can replace with API call logic later
-    console.log("Booking confirmed:", bookingDetails);
-
-    closeSummary(); // Close the summary popover
+      await neoAxios.post("/movies/bookTicket", {
+        username: userDetails.userName,
+        email: userDetails.userEmail,
+        totalSeats: selectedSeats.length,
+        seatNumbers: selectedSeats,
+        showTime: selectedShowTime,
+        amountPaid: totalPrice,
+        theatreName: selectedTheater,
+        imdbId: movie?.imdbID,
+        movieName: movie?.Title,
+      });
+      navigate("/movies/mytickets");
+      onClose();
+    } catch (err) {
+      console.error("Error confirming booking:", err);
+    }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">Ticket Summary</h2>
-        <p>
-          <strong>Theater:</strong> {theaterName}
-        </p>
-        <p>
-          <strong>Show Time:</strong> {showTime}
-        </p>
-        <p>
-          <strong>Show Date:</strong>{" "}
-          {showDate ? format(showDate, "PPP") : "N/A"}
-        </p>
-        <p>
-          <strong>Seats:</strong> {selectedSeats.join(", ")}
-        </p>
-        <p>
-          <strong>Total Price:</strong> {totalPrice} INR
-        </p>
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
+        <h2 className="text-2xl font-semibold mb-4">Ticket Summary</h2>
 
-        <div className="mt-4">
+        <div className="mb-4">
+          <p className="font-bold">Selected Theater:</p>
+          <p>{selectedTheater}</p>
+        </div>
+
+        <div className="mb-4">
+          <p className="font-bold">Show Time:</p>
+          <p>{selectedShowTime}</p>
+        </div>
+
+        <div className="mb-4">
+          <p className="font-bold">Show Date:</p>
+          <p>{selectedDate ? format(selectedDate, "PPP") : "Not selected"}</p>
+        </div>
+
+        <div className="mb-4">
+          <p className="font-bold">Selected Seats:</p>
+          <p>{selectedSeats.join(", ")}</p>
+        </div>
+
+        <div className="mb-4">
+          <p className="font-bold">Ticket Price:</p>
+          <p>{`$${totalPrice}`}</p>
+        </div>
+
+        <div className="text-right">
           <Button onClick={handleConfirm} className="mr-2">
             Confirm Booking
           </Button>
-          <Button variant="outline" onClick={closeSummary}>
+          <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
         </div>

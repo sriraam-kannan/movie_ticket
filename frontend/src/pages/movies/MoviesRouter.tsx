@@ -9,8 +9,8 @@ const MoviesRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Movies />} />
-      <Route path=":id" element={<MovieDetails />} />
-      <Route path="/:movieId/book-ticket" element={<TicketLayout />} />
+      <Route path="/:id" element={<MovieDetails />} />
+      <Route path="/:id/book-ticket" element={<TicketLayout />} />
       <Route path="/search" element={<MovieSearch />} />
       <Route path="/mytickets" element={<BookedTickets />} />
     </Routes>

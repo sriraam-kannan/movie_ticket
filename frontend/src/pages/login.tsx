@@ -21,9 +21,19 @@ export default function Login() {
         email,
         password,
       });
+      const userId = loginResponse?.data?.id;
+      const userName = loginResponse?.data?.name;
+      const userEmail = loginResponse?.data?.email;
 
       if (loginResponse.data) {
-        localStorage.setItem("login", "true");
+        localStorage.setItem(
+          "login",
+          JSON.stringify({
+            userId,
+            userName,
+            userEmail,
+          })
+        );
         navigate("/");
       } else {
         window.alert("Invalid username or password");

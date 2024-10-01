@@ -38,7 +38,7 @@ CREATE TABLE booked_tickets (
     email VARCHAR(255) NOT NULL,
     total_seats INT NOT NULL CHECK (total_seats > 0), 
     seat_number JSONB NOT NULL,          
-    show_time TIMESTAMP NOT NULL,
+    show_time TEXT NOT NULL,
     amount_paid DECIMAL(10, 2) NOT NULL CHECK (amount_paid >= 0), 
     theatre_name VARCHAR(255) NOT NULL,            
     imdb_id VARCHAR(20) NOT NULL,       
@@ -52,5 +52,6 @@ ADD CONSTRAINT fk_user_email FOREIGN KEY (email) REFERENCES users(email) ON DELE
 
 ALTER TABLE booked_tickets
 ADD CONSTRAINT fk_theatre_name FOREIGN KEY (theatre_name) REFERENCES theatres(theatre_name) ON DELETE CASCADE;
+
 
 

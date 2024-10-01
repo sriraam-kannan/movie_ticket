@@ -18,7 +18,7 @@ export default function Header() {
     <header className="w-full h-16 bg-white border-b flex items-center justify-between px-6 fixed top-0 left-0 z-50">
       {/* Logo Section */}
       <div className="flex items-center gap-4">
-        <img src="/path/to/logo.png" alt="Logo" className="h-10" />
+        <h1 className="text-lg font-bold">Movies Ticket</h1>
       </div>
 
       <nav className="flex-1 flex justify-center gap-8">
@@ -48,7 +48,7 @@ export default function Header() {
         <p className="text-lg font-medium">Welcome, User</p>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
+            <Button variant="secondary" className="rounded-full ">
               <CircleUserRound className="h-8 w-8 text-blue-600" />
               <span className="sr-only">Toggle user menu</span>
             </Button>
@@ -63,6 +63,7 @@ export default function Header() {
               onClick={() => {
                 console.log("Log out");
                 navigate("/login");
+                localStorage.removeItem("login");
               }}
             >
               Logout

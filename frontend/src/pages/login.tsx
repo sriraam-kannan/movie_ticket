@@ -1,24 +1,35 @@
 import { Link, useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import neoAxios from "@/lib/neoAxios";
+import { Loader } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onClickLogin = (event: any) => {
+  const onClickLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-    const form = event.currentTarget;
+    setLoading(true);
 
-    const username = form.elements.email.value;
-    const password = form.elements.password.value;
+    try {
+      const loginResponse = await neoAxios.post("/user/login", {
+        email,
+        password,
+      });
 
-    if (username === "admin" && password === "admin") {
-      localStorage.setItem("login", "true");
-      navigate("/");
-    } else {
-      console.error("Unable to login");
+      if (loginResponse.data) {
+        localStorage.setItem("login", "true");
+        navigate("/");
+      } else {
+        window.alert("Invalid username or password");
+      }
+    } catch (e) {
+      console.error("Unable to login:", e);
     }
   };
 
@@ -26,7 +37,7 @@ export default function Login() {
     <div className="mx-auto grid w-[350px] gap-6">
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Login</h1>
-        <p className="text-balance text-muted-foreground">
+        <p className="text-muted-foreground">
           Enter your email below to login to your account
         </p>
       </div>
@@ -36,8 +47,10 @@ export default function Login() {
           <Input
             id="email"
             name="email"
-            type="text"
+            type="email"
             placeholder="m@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -51,10 +64,17 @@ export default function Login() {
               Forgot your password?
             </Link>
           </div>
-          <Input id="password" name="password" type="password" required />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? <Loader /> : "Login"}
         </Button>
       </form>
       <div className="mt-4 text-center text-sm">

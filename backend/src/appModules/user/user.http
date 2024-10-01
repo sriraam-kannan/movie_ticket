@@ -17,3 +17,12 @@ GET {{baseUrl}}/getUser/sriraam@gmail.com HTTP/1.1
 
 ###Get all user
 GET {{baseUrl}}/getAllUsers HTTP/1.1
+
+###login
+POST {{baseUrl}}/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "sriraam@gmail.com",
+    "password": "admin"
+}

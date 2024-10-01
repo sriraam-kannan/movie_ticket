@@ -44,3 +44,20 @@ export async function getAllUsers(req: Request, res: Response) {
     return res.status(500).json({ error: "Error fetching all users" });
   }
 }
+
+export async function login(req: Request, res: Response) {
+  console.log("login API Hit successful!!");
+
+  try {
+    const { email, password } = req.body;
+    const user = await db("users").where({ email, password }).first();
+    if (user) {
+      return res.status(200).json(user);
+    } else {
+      return res.status(404).json({ error: "User not found" });
+    }
+  } catch {
+    console.error("Error loggin in");
+    return res.status(500).json({ error: "Error logging in" });
+  }
+}

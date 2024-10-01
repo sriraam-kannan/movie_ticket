@@ -4,7 +4,12 @@ dotenv.config();
 
 const dbConfig = {
   client: "pg",
-  connection: process.env.DB_URL,
+  connection: {
+    connectionString: process.env.DB_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  },
 };
 console.log("dbConfig", dbConfig);
 export default dbConfig;

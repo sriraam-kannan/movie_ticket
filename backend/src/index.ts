@@ -3,6 +3,7 @@ import knex from "knex";
 import dbConfig from "./database/knexfile";
 import appRoutes from "./appRoutes";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 const db = knex(dbConfig);
 
+app.use(cors());
 app.use(express.json());
 
 app.use("/api", appRoutes);

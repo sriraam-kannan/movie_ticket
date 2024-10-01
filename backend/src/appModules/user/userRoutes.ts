@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addUser, getAllUsers, getUser } from "./userController";
+import { addUser, getAllUsers, getUser, login } from "./userController";
 
 const router = Router();
 
@@ -23,4 +23,10 @@ router.get("/getAllUsers", (req, res) => {
   });
 });
 
+router.post("/login", (req, res) => {
+  login(req, res).catch((e) => {
+    console.error(e);
+    res.status(404).send({ message: "User not found, please sign-up" });
+  });
+});
 export default router;

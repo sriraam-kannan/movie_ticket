@@ -13,7 +13,7 @@ export default function AuthorizedLayout() {
     <>
       <div className="flex flex-row space-y-12">
         <Header />
-        <div className="grid h-screen w-full">
+        <div className="ml-52 flex flex-col flex-1 min-h-screen bg-gray-100">
           <Outlet />
         </div>
       </div>

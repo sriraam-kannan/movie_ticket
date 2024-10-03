@@ -5,7 +5,7 @@ import UnAuthorizedLayout from "./layouts/UnAuthorizedLayout";
 import AuthorizedLayout from "./layouts/AuthorizedLayout";
 
 // /** UnAuthorized Pages */
-import Login from "./pages/Login";
+import Login from "@/pages/Login";
 
 // /** MoviesRouter */
 import MoviesRouter from "../src/pages/movies/MoviesRouter";

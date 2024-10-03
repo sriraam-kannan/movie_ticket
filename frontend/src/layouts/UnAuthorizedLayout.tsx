@@ -1,12 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 export default function UnAuthorizedLayout() {
-  const user: any = localStorage.getItem("neouser");
-  const parsedUser = JSON.parse(user);
+  const isLoggedIn = JSON.parse(localStorage.getItem("login") || "false");
 
-  if (parsedUser) {
-    console.log("user already logged in", parsedUser);
-    return <Navigate to="/" replace={true} />;
+  if (isLoggedIn) {
+    console.log("User already logged in");
+    return <Navigate to="/" />;
   }
 
   return (

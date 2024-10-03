@@ -22,6 +22,12 @@ interface SeatProps {
   onSelect: (id: string) => void;
 }
 
+interface MovieDetails {
+  Title: string;
+  imdbID: string;
+  name: string;
+}
+
 const Seat: React.FC<SeatProps> = ({ id, isSelected, isBooked, onSelect }) => {
   return (
     <button
@@ -50,7 +56,7 @@ const TheaterBookingPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [bookedSeats, setBookedSeats] = useState<string[]>([]);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
-  const [movieDetails, setMovieDetails] = useState(null);
+  const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null); // Updated to be an object or null
   const ticketPrice = 120;
 
   // Generate the next 5 dates for selection
@@ -75,7 +81,7 @@ const TheaterBookingPage = () => {
           `https://www.omdbapi.com/?i=${id}&apikey=${OMDB_API_KEY}`
         );
         const data = await response.json();
-        setMovieDetails(data);
+        setMovieDetails(data); // Updated to store the movie object
       } catch (error) {
         console.error("Error fetching movie details:", error);
       }
@@ -243,102 +249,68 @@ const TheaterBookingPage = () => {
                 <SelectValue placeholder="Select Show Time" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="10:30 AM">10:30 AM</SelectItem>
-                <SelectItem value="02:30 PM">02:30 PM</SelectItem>
-                <SelectItem value="06:30 PM">06:30 PM</SelectItem>
-                <SelectItem value="10:30 PM">10:30 PM</SelectItem>
+                <SelectItem value="10:00 AM">10:00 AM</SelectItem>
+                <SelectItem value="01:00 PM">01:00 PM</SelectItem>
+                <SelectItem value="04:00 PM">04:00 PM</SelectItem>
+                <SelectItem value="07:00 PM">07:00 PM</SelectItem>
               </SelectContent>
             </Select>
 
-            <Select
-              onValueChange={(value) => setSelectedDate(new Date(value))}
-              value={selectedDate ? selectedDate.toString() : ""}
-            >
-              <SelectTrigger>
-                <SelectValue 
-                  placeholder="Select Date"
-
-                >
-                  {selectedDate ? format(selectedDate, "PPP") : ""}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
+            <div>
+              <label className="block font-medium mb-1">Select Date:</label>
+              <div className="flex gap-4">
                 {availableDates.map((date) => (
-                  <SelectItem key={date.toString()} value={date.toString()}>
-                    {format(date, "PPP")}
-                  </SelectItem>
+                  <Button
+                    key={date.toString()}
+                    variant={selectedDate === date ? "default" : "secondary"}
+                    onClick={() => setSelectedDate(date)}
+                  >
+                    {format(date, "dd MMM yyyy")}
+                  </Button>
                 ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Selected seats display */}
-        <div className=" overflow-auto">
-          <h2 className="text-xl font-semibold mb-4">Selected Seats</h2>
-          <div className="bg-gray-100 p-4 rounded-lg h-24 overflow-auto">
-            {selectedSeats.length > 0 ? (
-              <p className="break-words line-clamp-3 row-span-2">
-                {selectedSeats.join(", ")}
-              </p>
-            ) : (
-              <p>No seats selected</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Seat Arrangement</h2>
-        <div
-          className={cn(
-            "bg-gray-100 p-4 rounded-lg overflow-x-auto transition duration-500 ease-in-out",
-            !isSelectionComplete && "blur-sm opacity-50 pointer-events-none"
-          )}
-        >
-          <div className="inline-block">
-            <div className="mb-4 flex justify-center gap-4">
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-green-500 mr-2"></div>
-                <span>Available</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-red-500 mr-2"></div>
-                <span>Selected</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-gray-500 mr-2"></div>
-                <span>Booked</span>
-              </div>
-            </div>
-
-            <div className="flex gap-10">
-              <div>{generateSeats().seatsLeftSide}</div>
-              <div>{generateSeats().seatsRightSide}</div>
-            </div>
-
-            <div className="mt-6 text-center">
-              <div className="text-center border-2 border-black px-8 py-1 bg-gray-300 rounded-t-md">
-                Screen
               </div>
             </div>
           </div>
         </div>
+
+        {/* Seat Map */}
+        <div>
+          <h2 className="text-xl font-semibold mb-4">Select Seats</h2>
+          <div className="flex justify-around">
+            <div>{generateSeats().seatsLeftSide}</div>
+            <div>{generateSeats().seatsRightSide}</div>
+          </div>
+        </div>
       </div>
 
-      <div className="text-center">
-        <Button onClick={handleBooking}>Proceed to Book</Button>
-      </div>
+      {/* Movie Details */}
+      {movieDetails && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">
+            Movie: {movieDetails.Title} (ID: {movieDetails.imdbID})
+          </h2>
+        </div>
+      )}
+
+      <Button onClick={handleBooking} disabled={!isSelectionComplete}>
+        Proceed to Summary
+      </Button>
 
       {isSummaryOpen && (
         <TicketSummaryPopup
+          isOpen={isSummaryOpen}
+          onClose={closeSummary}
           selectedSeats={selectedSeats}
           selectedTheater={selectedTheater}
           selectedShowTime={selectedShowTime}
           selectedDate={selectedDate}
+          movieName={movieDetails?.Title}
           ticketPrice={ticketPrice}
-          onClose={closeSummary}
-          movie={movieDetails}
+          username="username"
+          email="email"
+          Title={movieDetails?.Title || ""}
+          imdbID={movieDetails?.imdbID || ""}
+          name={movieDetails?.name || ""}
         />
       )}
     </div>

@@ -5,6 +5,7 @@ import neoAxios from "@/lib/neoAxios";
 import { useNavigate } from "react-router-dom";
 
 interface TicketSummaryPopupProps {
+  isOpen: boolean;
   selectedSeats: string[];
   selectedTheater: string;
   selectedShowTime: string;
@@ -12,10 +13,12 @@ interface TicketSummaryPopupProps {
   ticketPrice: number;
   username: string;
   email: string;
-  movie: {
-    imdbId: string;
-    name: string;
-  };
+
+  Title: string;
+  imdbID: string;
+  name: string;
+  movieName?: string;
+
   onClose: () => void;
 }
 
@@ -25,9 +28,8 @@ const TicketSummaryPopup: React.FC<TicketSummaryPopupProps> = ({
   selectedShowTime,
   selectedDate,
   ticketPrice,
-  username,
-  email,
-  movie,
+  Title,
+  imdbID,
   onClose,
 }) => {
   const navigate = useNavigate();
@@ -36,8 +38,6 @@ const TicketSummaryPopup: React.FC<TicketSummaryPopupProps> = ({
   const handleConfirm = async () => {
     const userDetails = JSON.parse(localStorage.getItem("login") || "{}");
     try {
-      console.log("movie in try block", movie);
-
       await neoAxios.post("/movies/bookTicket", {
         username: userDetails.userName,
         email: userDetails.userEmail,
@@ -46,8 +46,8 @@ const TicketSummaryPopup: React.FC<TicketSummaryPopupProps> = ({
         showTime: selectedShowTime,
         amountPaid: totalPrice,
         theatreName: selectedTheater,
-        imdbId: movie?.imdbID,
-        movieName: movie?.Title,
+        imdbId: imdbID,
+        movieName: Title,
       });
       navigate("/movies/mytickets");
       onClose();

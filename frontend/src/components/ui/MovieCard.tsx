@@ -6,12 +6,12 @@ interface MovieCardProps {
   movie: {
     imdbID: string;
     Title: string;
-    Year: string;
     Poster: string;
-    Rating: number;
-    Certification: string;
+    Year: string;
     Language: string;
     imdbRating: string;
+    Rating?: string | number;
+    Certification?: string;
   };
 }
 

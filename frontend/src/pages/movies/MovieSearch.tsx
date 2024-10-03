@@ -17,7 +17,7 @@ interface Movie {
   Poster: string;
   Year: string;
   Language: string;
-  imdbRating: number;
+  imdbRating: string; 
   Rating?: number;
   Certification?: string;
 }

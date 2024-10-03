@@ -11,7 +11,7 @@ export async function addUser(req: Request, res: Response) {
     return res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     console.error("Error adding user:", error);
-    return res.status(500).json({ error: "Error adding user" });
+    return res.status(500).json({ message: "Error adding user", error: error });
   }
 }
 
@@ -29,7 +29,9 @@ export async function getUser(req: Request, res: Response) {
     }
   } catch (error) {
     console.error("Error fetching user:", error);
-    return res.status(500).json({ error: "Error fetching user" });
+    return res
+      .status(500)
+      .json({ message: "Error fetching user", error: error });
   }
 }
 
@@ -41,7 +43,9 @@ export async function getAllUsers(req: Request, res: Response) {
     return res.status(200).json(users);
   } catch (error) {
     console.error("Error fetching all users:", error);
-    return res.status(500).json({ error: "Error fetching all users" });
+    return res
+      .status(500)
+      .json({ message: "Error fetching all users", error: error });
   }
 }
 
@@ -56,8 +60,8 @@ export async function login(req: Request, res: Response) {
     } else {
       return res.status(404).json({ error: "User not found" });
     }
-  } catch {
+  } catch (error) {
     console.error("Error loggin in");
-    return res.status(500).json({ error: "Error logging in" });
+    return res.status(500).json({ message: "Error logging in", error: error });
   }
 }

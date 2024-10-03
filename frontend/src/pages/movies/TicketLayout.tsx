@@ -255,10 +255,12 @@ const TheaterBookingPage = () => {
               value={selectedDate ? selectedDate.toString() : ""}
             >
               <SelectTrigger>
-                <SelectValue
+                <SelectValue 
                   placeholder="Select Date"
-                  value={selectedDate ? format(selectedDate, "PPP") : ""}
-                />
+
+                >
+                  {selectedDate ? format(selectedDate, "PPP") : ""}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {availableDates.map((date) => (

@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import Header from "@/components/ui/header";
 
 export default function AuthorizedLayout() {
-  const isLoggedIn = JSON.parse(localStorage.getItem("login"));
+  const isLoggedIn = JSON.parse(localStorage.getItem("login") || "false");
 
   if (!isLoggedIn) {
     console.log("User not logged in");

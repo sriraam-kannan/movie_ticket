@@ -34,7 +34,9 @@ export async function bookTicket(
     return res.status(201).json({ message: "Ticket booked successfully" });
   } catch (error) {
     console.error("Error booking ticket:", error);
-    return res.status(500).json({ error: "Error booking ticket" });
+    return res
+      .status(500)
+      .json({ message: "Error booking ticket", error: error });
   }
 }
 
@@ -53,7 +55,9 @@ export async function fetchTicket(
     }
   } catch (error) {
     console.error("Error fetching ticket:", error);
-    return res.status(500).json({ error: "Error fetching ticket" });
+    return res
+      .status(500)
+      .json({ message: "Error fetching ticket", error: error });
   }
 }
 
@@ -79,6 +83,8 @@ export async function getBookedTickets(req: Request, res: Response) {
     return res.status(200).json(bookedSeats);
   } catch (error) {
     console.error("Error fetching booked tickets:", error);
-    return res.status(500).json({ error: "Error fetching booked tickets" });
+    return res
+      .status(500)
+      .json({ message: "Error fetching booked tickets", error: error });
   }
 }

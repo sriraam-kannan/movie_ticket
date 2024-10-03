@@ -1,4 +1,4 @@
-
+-- Active: 1727685526588@@dpg-crt55rjtq21c73dkp9g0-a.singapore-postgres.render.com@5432@movie_ticket_1tck
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,        
     name VARCHAR(255) NOT NULL,

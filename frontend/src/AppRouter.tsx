@@ -5,7 +5,7 @@ import UnAuthorizedLayout from "./layouts/UnAuthorizedLayout";
 import AuthorizedLayout from "./layouts/AuthorizedLayout";
 
 // /** UnAuthorized Pages */
-import Login from "./pages/Login";
+import LoginPage from "./pages/LoginPage";
 
 // /** MoviesRouter */
 import MoviesRouter from "../src/pages/movies/MoviesRouter";
@@ -31,7 +31,7 @@ export const appRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Login />,
+        element: <LoginPage />,
       },
     ],
   },

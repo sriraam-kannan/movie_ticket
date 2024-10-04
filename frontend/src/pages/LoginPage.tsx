@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import neoAxios from "@/lib/neoAxios";
 import { Loader } from "lucide-react";
 
-export default function Login() {
+export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

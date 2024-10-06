@@ -17,7 +17,7 @@ router.get("/fetchTicket/:email", (req, res) => {
   });
 });
 
-router.get("/bookedTickets", (req, res) => {
+router.get("/getBookedTickets", (req, res) => {
   getBookedTickets(req, res).catch((e) => {
     console.error(e);
     res.status(500).send({ message: "Internal server error", error: e });

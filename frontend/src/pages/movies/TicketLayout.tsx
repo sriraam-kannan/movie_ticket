@@ -109,15 +109,19 @@ const TheaterBookingPage = () => {
           const fullShowTime = new Date(selectedDate);
           fullShowTime.setHours(hour, parseInt(minutes, 10), 0, 0);
 
-          const response = await neoAxios.get("/movies/bookedTickets", {
+          const response = await neoAxios.get("/movies/getBookedTickets", {
             params: {
               theatreName: selectedTheater,
-              showTime: fullShowTime.toISOString(),
+              showTime: selectedShowTime,
               date: fullShowTime.toISOString().split("T")[0],
             },
           });
 
-          setBookedSeats(response.data);
+          const bookedSeats = response.data
+            .map((ticket: { seat_number: string[] }) => ticket.seat_number)
+            .flat();
+
+          setBookedSeats(bookedSeats);
         } catch (error) {
           console.error("Error fetching booked seats:", error);
         }
@@ -261,10 +265,7 @@ const TheaterBookingPage = () => {
               value={selectedDate ? selectedDate.toString() : ""}
             >
               <SelectTrigger>
-                <SelectValue 
-                  placeholder="Select Date"
-
-                >
+                <SelectValue placeholder="Select Date">
                   {selectedDate ? format(selectedDate, "PPP") : ""}
                 </SelectValue>
               </SelectTrigger>

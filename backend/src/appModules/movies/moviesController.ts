@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import db from "../../database/db";
+import { format } from "date-fns";
 
 export async function bookTicket(
   req: Request,
@@ -15,6 +16,7 @@ export async function bookTicket(
     theatreName,
     imdbId,
     movieName,
+    selectedDate,
   } = req.body;
 
   console.log("incoming request body", req.body);
@@ -30,6 +32,7 @@ export async function bookTicket(
       theatre_name: theatreName,
       imdb_id: imdbId,
       movie_name: movieName,
+      show_date: format(new Date(selectedDate), "yyyy-MM-dd"),
     });
     return res.status(201).json({ message: "Ticket booked successfully" });
   } catch (error) {
@@ -48,6 +51,7 @@ export async function fetchTicket(
 
   try {
     const ticket = await db("booked_tickets").where({ email });
+    console.log("ticket", ticket);
     if (ticket) {
       return res.status(200).json(ticket);
     } else {
@@ -63,24 +67,20 @@ export async function fetchTicket(
 
 export async function getBookedTickets(req: Request, res: Response) {
   const { theatreName, showTime, date } = req.query;
+  console.log("getBookedTickets API hit successfulls");
 
   try {
     const tickets = await db("booked_tickets")
       .select("seat_number")
-      .modify((queryBuilder) => {
-        queryBuilder.where("theatre_name", theatreName);
-        queryBuilder.where("show_time", showTime);
-        queryBuilder.whereRaw("DATE(show_time) = ?", [date]);
-      });
+      .where("theatre_name", theatreName)
+      .where("show_time", showTime)
+      .where("show_date", date);
 
     if (tickets.length === 0) {
       return res.status(200).json([]);
     }
 
-    const bookedSeats = tickets.flatMap((ticket: { seat_number: string }) =>
-      JSON.parse(ticket.seat_number)
-    );
-    return res.status(200).json(bookedSeats);
+    return res.status(200).json(tickets);
   } catch (error) {
     console.error("Error fetching booked tickets:", error);
     return res

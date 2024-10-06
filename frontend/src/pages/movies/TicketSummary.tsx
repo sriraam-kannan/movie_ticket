@@ -48,6 +48,7 @@ const TicketSummaryPopup: React.FC<TicketSummaryPopupProps> = ({
         theatreName: selectedTheater,
         imdbId: imdbID,
         movieName: Title,
+        selectedDate: selectedDate?.toISOString().split("T")[0],
       });
       navigate("/movies/mytickets");
       onClose();
